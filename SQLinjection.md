@@ -65,7 +65,6 @@ SQL Injection isn't limited to search boxes. It can occur anywhere a website pro
     
 ---
 
-    ---
 
 ### Lab 2: SQL injection UNION attack (Determining Columns)
 * **Goal:** Determine the number of columns returned by the query.
