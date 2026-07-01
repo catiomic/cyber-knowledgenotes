@@ -52,5 +52,30 @@ SQL Injection isn't limited to search boxes. It can occur anywhere a website pro
     * **Impact:** Modifying existing data (like changing another user’s email or elevating my own account privileges).
 * **ORDER BY (The Sorter):** Where: Any feature that allows sorting results (e.g., "Sort by Price").
     * **Impact:** Probing the database structure by injecting logic that changes the sort order based on hidden data.
+
+      ---
+
+### Lab 1: SQL injection in WHERE clause (Hidden Data)
+* **Goal:** Display unreleased products.
+* **Vulnerability Location:** Category filter (`/filter?category=Gifts`). = SELECT * FROM products WHERE category = 'Gifts' AND released = 1
+* **Payload:** `' OR 1=1 --`
+* **Why it worked:** * The `'` broke out of the category string.
+  * The `OR 1=1` made the database condition always `True`.
+  * The `--` commented out the `AND released = 1` constraint.
     
+---
+
+    ---
+
+### Lab 2: SQL injection UNION attack (Determining Columns)
+* **Goal:** Determine the number of columns returned by the query.
+* **Technique Used:**
+    * **`ORDER BY`**: Used as a "measuring tape" to find the number of columns. An error indicates the limit was exceeded.
+    * **`UNION SELECT NULL`**: Used as a "bridge" to retrieve data.
+* **Key Insights:**
+    * **Pulling, not Sending:** `UNION` is an "In-Band" retrieval technique. Im not writing to the database, im forcing it to pull hidden data and display it in                                my current browser window.
+    * **The "NULL" Strategy:** `NULL` is a universal placeholder. It's compatible with almost every data type, making it the perfect tool to map out the number of                             columns without triggering a "data type mismatch" error.
+    * **Data Pipe:** By testing with text values (e.g., `'TEST2'`), I successfully identified which column is mapped to the webpage's display, creating a "Data                      Pipe" for future data extraction.
+
+---
    
